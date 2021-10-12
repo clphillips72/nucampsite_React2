@@ -14,12 +14,33 @@ function RenderDirectoryItem({campsite, onClick}) {
     )
 }
 
-function Directory (props) {
+/*  The Directory component used to be a class Component, but it has now been changed to be a function(al) component */
 
-    const directory = props.campsites.map(campsite => {
+// function Directory (props) {
+
+//     const directory = props.campsites.map(campsite => {
+//         return(
+//             <div key={campsite.id} className="col-md-5 m-1">
+//                 <RenderDirectoryItem campsite={campsite} onClick={props.onClick} />
+//             </div>                
+//         );
+//     })
+
+//     return(
+//         <div className="container">
+//             <div className="row">
+//                 {directory}
+//             </div>
+//         </div>            
+//     );
+// }  
+
+function Directory ({campsites, onClick}) {     //doing object destructuring here
+
+    const directory = campsites.map(campsite => {
         return(
             <div key={campsite.id} className="col-md-5 m-1">
-                <RenderDirectoryItem campsite={campsite} onClick={props.onClick} />
+                <RenderDirectoryItem campsite={campsite} onClick={onClick} />
             </div>                
         );
     })
@@ -32,6 +53,5 @@ function Directory (props) {
         </div>            
     );
 }  
-
 
 export default Directory;

@@ -35,7 +35,7 @@ function RenderDirectoryItem({campsite}) {
 //     );
 // }  
 
-function Directory ({campsites, onClick}) {     //doing object destructuring here
+function Directory ({campsites}) {     //doing object destructuring here
 
     const directory = campsites.map(campsite => {
         return(

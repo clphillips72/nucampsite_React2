@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
 
-function RenderDirectoryItem({campsite, onClick}) {
+function RenderDirectoryItem({campsite}) {
     return(
         //The arrow function is being used below only to avoid the extra work of binding 
         //which would be required when not using an arrow function
-        <Card onClick={() => onClick(campsite.id)}>            
+        <Card>            
             <CardImg width="100%" src={campsite.image} alt={campsite.name} />
             <CardImgOverlay>
                 <CardTitle>{campsite.name}</CardTitle>
@@ -40,7 +40,7 @@ function Directory ({campsites, onClick}) {     //doing object destructuring her
     const directory = campsites.map(campsite => {
         return(
             <div key={campsite.id} className="col-md-5 m-1">
-                <RenderDirectoryItem campsite={campsite} onClick={onClick} />
+                <RenderDirectoryItem campsite={campsite} />
             </div>                
         );
     })

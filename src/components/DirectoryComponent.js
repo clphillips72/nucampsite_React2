@@ -1,15 +1,17 @@
 import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 function RenderDirectoryItem({campsite}) {
     return(
-        //The arrow function is being used below only to avoid the extra work of binding 
-        //which would be required when not using an arrow function
-        <Card>            
-            <CardImg width="100%" src={campsite.image} alt={campsite.name} />
-            <CardImgOverlay>
-                <CardTitle>{campsite.name}</CardTitle>
-            </CardImgOverlay>
+        <Card>    
+            {/* THe Link code below is creating a dynamic link using the campsite id that was passed in to this function, which is the campsite that was clicked on within this page/component */}
+            <Link to={`directory/${campsite.id}`}>        
+                <CardImg width="100%" src={campsite.image} alt={campsite.name} />
+                <CardImgOverlay>
+                    <CardTitle>{campsite.name}</CardTitle>
+                </CardImgOverlay>
+            </Link>
         </Card>
     )
 }

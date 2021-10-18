@@ -10,6 +10,7 @@ import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import {Switch, Route, Redirect } from 'react-router-dom';
 import Contact from './ContactComponent';
+import About from './AboutComponent';
 
 class Main extends Component {
     constructor(props) {
@@ -41,16 +42,7 @@ class Main extends Component {
                     comments={this.state.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)} 
                 />
             );
-        }
-
-        // const CampsiteWithId = ({match}) => {
-        //     return (
-        //         <CampsiteInfo 
-        //             campsite={this.state.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
-        //             comments={this.state.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
-        //         />
-        //     );
-        // };    
+        } 
         
         return (
             <div>
@@ -65,14 +57,18 @@ class Main extends Component {
                     {/* 
                         notes for the       path='/directory/:campsiteId'       code below
 
+                        The dynamic value of :campsiteId is set in the <Link to={`directory/${campsite.id}`}> code 
+                        in the RenderDirectoryItem function of the Directory component
+
                         The colon tells the Route(r) that whatever follows the forward slash is going to be a parameter and it takes whatever that is and puts it inside the campsiteID property.  
                         The Route component itself stores an object named match in its state which has as its property an object named params and this campsiteId gets stored as a proprety of that params object.  
 
                         When the CampsiteWithID method is called, the Route component's object named match is passed to the CampSiteWithId component/method as a prop 
                         automatically so we don't have to specify that it's being passed
 
-                    */}
+                    */}                    
                     <Route exact path='/directory/:campsiteId' component={CampsiteWithId} />
+                    <Route exact path='/aboutus' render={() => <About partners={this.state.partners} />} />
                     <Route exact path='/contactus' component={Contact} />            
                     <Redirect to='/home' />
                 </Switch>

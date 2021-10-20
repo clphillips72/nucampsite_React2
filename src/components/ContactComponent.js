@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem,
-    Button, Form, FormGroup, Label, Input, Col } from 'reactstrap'; 
+    Button, Form, FormGroup, Label, Input, Col, FormFeedback } from 'reactstrap'; 
 // import { Component } from 'react/cjs/react.production.min';
 
 class Contact extends Component {
@@ -14,7 +14,15 @@ class Contact extends Component {
             email: '',
             agree: false,
             contactType: 'By Phone',
-            feedback: ''
+            feedback: '',
+// The touched properties will keep track of whether or not those properties have been touched or not.  
+// If the user clicks into that field, then that touched property is true
+            touched: {
+                firstName: false,
+                lastName: false,
+                phoneNum: false,
+                email: false
+            }
         };
         // These bind statements tell the 2 components (handleInputChange and handleSubmit) to look
         // in this class' state for any fields referenced in those 2 components by this.state.
@@ -49,7 +57,67 @@ class Contact extends Component {
         event.preventDefault();
     }
 
+    validate(firstName, lastName, phoneNum, email) {
+
+        const errors = {
+            firstName: '',
+            lastName: '',
+            phoneNum: '',
+            email: ''
+        };
+
+        if (this.state.touched.firstName) {
+            if (firstName.length < 2) {
+                errors.firstName = 'First name must be at least 2 characters.';
+            } else if (firstName.length > 15) {
+                errors.firstName = 'First name must be 15 or less characters.';
+            }
+        }
+
+        if (this.state.touched.lastName) {
+            if (lastName.length < 2) {
+                errors.lastName = 'Last name must be at least 2 characters.';
+            } else if (lastName.length > 15) {
+                errors.lastName = 'Last name must be 15 or less characters.';
+            }
+        }
+
+        const reg = /^\d+$/;
+        if (this.state.touched.phoneNum && !reg.test(phoneNum)) {
+            errors.phoneNum = 'The phone number should contain only numbers.';
+        }
+
+        if (this.state.touched.email && !email.includes('@')) {
+            errors.email = 'Email should contain a @';
+        }
+
+        return errors;
+    }
+
+// The handleBlur method is executed via the onBlur= attribute on the HTML Input tags.  When a user clicks into the
+// field for properties with an onBlur= attribute, this method will execute.  The specific field name that the user
+// clicked into is passed to this method in the argument named "field".  Using arrow function to access this.* 
+// rather than doing a bind just below the constructor like what's been done for other methods.
+
+    handleBlur = (field) => () => {
+        this.setState({
+            // ******************************************************************************************
+            //    {...this.state.touched, [field]: true} notes                                        ***
+            // ******************************************************************************************
+            //    this is using the spread syntax that either combines objects/arrays together or 
+            //    updates a propery in an array.  In this example, [field] is a computed propery, 
+            //    containing the field name that was "touched".  That field name and the value of true is 
+            //    updating the value in this.state.touched to true    
+            // ******************************************************************************************
+
+            touched: {...this.state.touched, [field]: true}
+        })
+    }
+
     render() {
+
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.phoneNum, this.state.email); 
+
         return (
             <div className="container">
                 <div className="row">
@@ -89,7 +157,10 @@ class Contact extends Component {
                                     <Input type="text" id="firstName" name="firstName"
                                         placeholder="First Name"
                                         value={this.state.firstName}
+                                        invalid={errors.firstName}
+                                        onBlur={this.handleBlur("firstName")}
                                         onChange={this.handleInputChange} />
+                                    <FormFeedback>{errors.firstName}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -98,7 +169,10 @@ class Contact extends Component {
                                     <Input type="text" id="lastName" name="lastName"
                                         placeholder="Last Name"
                                         value={this.state.lastName}
+                                        invalid={errors.lastName}
+                                        onBlur={this.handleBlur("lastName")}
                                         onChange={this.handleInputChange} />
+                                    <FormFeedback>{errors.lastName}</FormFeedback>
                                 </Col>                        
                             </FormGroup>
                             <FormGroup row>
@@ -107,7 +181,10 @@ class Contact extends Component {
                                     <Input type="tel" id="phoneNum" name="phoneNum"
                                         placeholder="Phone number"
                                         value={this.state.phoneNum}
+                                        invalid={errors.phoneNum}
+                                        onBlur={this.handleBlur("phoneNum")}
                                         onChange={this.handleInputChange} />
+                                    <FormFeedback>{errors.phoneNum}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -116,7 +193,10 @@ class Contact extends Component {
                                     <Input type="email" id="email" name="email"
                                         placeholder="Email"
                                         value={this.state.email}
+                                        invalid={errors.email}
+                                        onBlur={this.handleBlur("email")}
                                         onChange={this.handleInputChange} />
+                                        <FormFeedback>{errors.email}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>

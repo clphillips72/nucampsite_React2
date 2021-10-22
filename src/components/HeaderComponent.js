@@ -88,7 +88,10 @@ class Header extends Component {
                     </div>
                 </Navbar>
                 {/* isOpen and toggle are boolean attributes of the Modal reactstrap component that
-                    keeps track of the modal being opened and toggleing the modal open/close  */}
+                    keeps track of the modal being opened and toggling the modal open/close  
+                    
+                    The isOpen= and toggle= attributes on the <Modal> HTML tag will need  
+                    */}
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
                     <ModalBody>

@@ -1,35 +1,40 @@
 import React, { Component } from 'react';
 import Directory from './DirectoryComponent';
-import { CAMPSITES } from '../shared/campsites';
-import { COMMENTS } from '../shared/comments';
-import { PARTNERS } from '../shared/partners';
-import { PROMOTIONS } from '../shared/promotions';
 import CampsiteInfo from './CampsiteInfoComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
-import {Switch, Route, Redirect } from 'react-router-dom';
+import {Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
+import { connect } from 'react-redux';
+// We are no longer storing the application data in the Main component "state".  We are transferring it to the Redux 
+// store, so we no longer need to import the CAMPSITES, COMMENTS, PARTNERS, and PROMOTIONS data objects.  Those objects
+// are now being imported in src/redux/reducer.js.  Since we're not storing that data in Main, we no longer need the 
+// constructor either, so that is being removed.  Instead, we're going to get the "state" from redux, so we're going to 
+// setup a mapStateToProps function to do that.  Once done, all the fields previously accessed via this.state need
+// to be changed to this.props for some reason.  Yes, this component doesn't have a "state", so that makes sense,
+// but why props?  When this component is called via App.js, the state data isn't being passed to this class
+// function, like state data would normally be passed i.e. </ <Main stateData={fieldName} />
 
-class Main extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-          campsites:  CAMPSITES,
-          comments:   COMMENTS,
-          partners:   PARTNERS,
-          promotions: PROMOTIONS
-        };
-    }
+const mapStateToProps = state => {
+    return {
+        campsites: state.campsites,
+        comments: state.comments,
+        partners: state.partners,
+        promotions: state.promotions
+    };
+};
+
+class Main extends Component { 
 
     render() {
 
         const HomePage = () => {
             return (
-                <Home campsite={this.state.campsites.filter(campsite => campsite.featured)[0]} 
-                      promotion={this.state.promotions.filter(promotion => promotion.featured)[0]}
-                      partner={this.state.partners.filter(partner => partner.featured)[0]}
+                <Home campsite={this.props.campsites.filter(campsite => campsite.featured)[0]} 
+                      promotion={this.props.promotions.filter(promotion => promotion.featured)[0]}
+                      partner={this.props.partners.filter(partner => partner.featured)[0]}
                 />
             );
         };
@@ -38,8 +43,8 @@ class Main extends Component {
         const CampsiteWithId = ({match}) => {
             return(
                 <CampsiteInfo 
-                    campsite={this.state.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]} 
-                    comments={this.state.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)} 
+                    campsite={this.props.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]} 
+                    comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)} 
                 />
             );
         } 
@@ -53,7 +58,7 @@ class Main extends Component {
                 */}
                 <Switch>
                     <Route path='/home' component={HomePage} />
-                    <Route exact path='/directory' render={() => <Directory campsites={this.state.campsites} />} />
+                    <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
                     {/* 
                         notes for the       path='/directory/:campsiteId'       code below
 
@@ -68,7 +73,7 @@ class Main extends Component {
 
                     */}                    
                     <Route exact path='/directory/:campsiteId' component={CampsiteWithId} />
-                    <Route exact path='/aboutus' render={() => <About partners={this.state.partners} />} />
+                    <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
                     <Route exact path='/contactus' component={Contact} />            
                     <Redirect to='/home' />
                 </Switch>
@@ -77,5 +82,9 @@ class Main extends Component {
         );
     }
 }
-
-export default Main;
+//  this export was changed when removing state data from the Main function/component and replacing it with using
+//  redux to keep track of state.  The "withRouter" function is imported above from 'react-router-dom'.  The "connect"
+//  function is also imported above from 'react-redux'.  The mapStateToProps function was added above at the same 
+//  time of this change.
+ 
+export default withRouter(connect(mapStateToProps)(Main));

@@ -39,6 +39,8 @@ class CommentForm extends Component {
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>                
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>                        
                     <ModalBody>
+                        {/* Look in one of the two videos about Redux Forms in the React Week 4 section 
+                            to find out where "values" comes from.  */}
                         <LocalForm onSubmit={values => this.handleSubmit(values)}>   
                             <div className="form-group">
                                 <Label htmlFor="rating">Rating</Label>                                

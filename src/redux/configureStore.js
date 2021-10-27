@@ -5,6 +5,8 @@ import { Partners } from './partners';              //  <== partners reducer
 import { Promotions } from './promotions';          //  <== promotions reducer
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import { createForms } from 'react-redux-form';
+import { InitialFeedback } from './forms';
 
 export const ConfigureStore = () => {
     // createStore requires a reducer as an argument, but it will only accept a single reducer.  So we are
@@ -14,8 +16,11 @@ export const ConfigureStore = () => {
             campsites: Campsites,
             comments: Comments,
             partners: Partners,
-            promotions: Promotions
-        }),
+            promotions: Promotions,
+            ...createForms({
+                feedbackForm: InitialFeedback
+            })
+        }), 
         applyMiddleware(thunk, logger)
     );
 

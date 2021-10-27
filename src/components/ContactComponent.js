@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem,
     Button, Label, Col, Row } from 'reactstrap';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
 
 // We need to modify this component to use the Redux store instead of this component's local state, like 
 // what was previously done in the Main component.  All state data must now be stored in the Redux store, 
@@ -46,10 +46,9 @@ class Contact extends Component {
     }
 
     handleSubmit(values) {
-        // console.log expects a string and not an object, so using the stringify method on the this.state object
-        // to turn it into a string
-        console.log('Current state is: ' + JSON.stringify(values));
-        alert('Current state is: ' + JSON.stringify(values));
+        console.log('Current State is: ' + JSON.stringify(values));
+        alert('Current State is: ' + JSON.stringify(values));
+        this.props.resetFeedbackForm();
     }
 
     render() {
@@ -86,7 +85,7 @@ class Contact extends Component {
                         <hr />
                     </div>
                     <div className="col-md-10">
-                        <LocalForm onSubmit={values => this.handleSubmit(values)}>
+                        <Form model="feedbackForm" onSubmit={values => this.handleSubmit(values)}> 
                             <Row className="form-group">
                                 <Label htmlFor="firstName" md={2}>First Name</Label>
                                 <Col md={10}>
@@ -226,7 +225,7 @@ class Contact extends Component {
                                     </Button>
                                 </Col>
                             </Row>
-                        </LocalForm>
+                        </Form>
                     </div>
                 </div>
             </div>

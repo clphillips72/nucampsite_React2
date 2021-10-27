@@ -9,6 +9,7 @@ import Contact from './ContactComponent';
 import About from './AboutComponent';
 import { connect } from 'react-redux';
 import { addComment, fetchCampsites } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
 // We are no longer storing the application data in the Main component "state".  We are transferring it to the Redux 
 // store, so we no longer need to import the CAMPSITES, COMMENTS, PARTNERS, and PROMOTIONS data objects.  Those objects
 // are now being imported in src/redux/reducer.js.  Since we're not storing that data in Main, we no longer need the 
@@ -29,7 +30,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
-    fetchCampsites: () => (fetchCampsites())
+    fetchCampsites: () => (fetchCampsites()),
+    resetFeedbackForm: () => (actions.reset('feedbackForm'))
 };
 
 class Main extends Component { 
@@ -90,7 +92,7 @@ class Main extends Component {
                     */}                    
                     <Route exact path='/directory/:campsiteId' component={CampsiteWithId} />
                     <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-                    <Route exact path='/contactus' component={Contact} />            
+                    <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
                     <Redirect to='/home' />
                 </Switch>
                 <Footer />

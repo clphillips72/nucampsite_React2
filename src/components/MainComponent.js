@@ -8,6 +8,7 @@ import {Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import { connect } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
 // We are no longer storing the application data in the Main component "state".  We are transferring it to the Redux 
 // store, so we no longer need to import the CAMPSITES, COMMENTS, PARTNERS, and PROMOTIONS data objects.  Those objects
 // are now being imported in src/redux/reducer.js.  Since we're not storing that data in Main, we no longer need the 
@@ -24,6 +25,10 @@ const mapStateToProps = state => {
         partners: state.partners,
         promotions: state.promotions
     };
+};
+
+const mapDispatchToProps = {
+    addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text))
 };
 
 class Main extends Component { 
@@ -44,7 +49,8 @@ class Main extends Component {
             return(
                 <CampsiteInfo 
                     campsite={this.props.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]} 
-                    comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)} 
+                    comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
+                    addComment={this.props.addComment}
                 />
             );
         } 
@@ -87,4 +93,4 @@ class Main extends Component {
 //  function is also imported above from 'react-redux'.  The mapStateToProps function was added above at the same 
 //  time of this change.
  
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

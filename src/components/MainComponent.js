@@ -10,6 +10,7 @@ import About from './AboutComponent';
 import { connect } from 'react-redux';
 import { postComment, fetchCampsites, fetchComments, fetchPromotions } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 // We are no longer storing the application data in the Main component "state".  We are transferring it to the Redux 
 // store, so we no longer need to import the CAMPSITES, COMMENTS, PARTNERS, and PROMOTIONS data objects.  Those objects
@@ -78,31 +79,35 @@ class Main extends Component {
         return (
             <div>
                 <Header />
+                    <TransitionGroup>
+                    <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
                 {/* When the address bar has the same value as the path's below, then that specific component will be rendered.
                     When passing data to a component, then need to use render=, otherwise use component=.
 
                 */}
-                <Switch>
-                    <Route path='/home' component={HomePage} />
-                    <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
-                    {/* 
-                        notes for the       path='/directory/:campsiteId'       code below
+                        <Switch>
+                            <Route path='/home' component={HomePage} />
+                            <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
+                            {/* 
+                                notes for the       path='/directory/:campsiteId'       code below
 
-                        The dynamic value of :campsiteId is set in the <Link to={`directory/${campsite.id}`}> code 
-                        in the RenderDirectoryItem function of the Directory component
+                                The dynamic value of :campsiteId is set in the <Link to={`directory/${campsite.id}`}> code 
+                                in the RenderDirectoryItem function of the Directory component
 
-                        The colon tells the Route(r) that whatever follows the forward slash is going to be a parameter and it takes whatever that is and puts it inside the campsiteID property.  
-                        The Route component itself stores an object named match in its state which has as its property an object named params and this campsiteId gets stored as a proprety of that params object.  
+                                The colon tells the Route(r) that whatever follows the forward slash is going to be a parameter and it takes whatever that is and puts it inside the campsiteID property.  
+                                The Route component itself stores an object named match in its state which has as its property an object named params and this campsiteId gets stored as a proprety of that params object.  
 
-                        When the CampsiteWithID method is called, the Route component's object named match is passed to the CampSiteWithId component/method as a prop 
-                        automatically so we don't have to specify that it's being passed
+                                When the CampsiteWithID method is called, the Route component's object named match is passed to the CampSiteWithId component/method as a prop 
+                                automatically so we don't have to specify that it's being passed
 
-                    */}                    
-                    <Route exact path='/directory/:campsiteId' component={CampsiteWithId} />
-                    <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-                    <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
-                    <Redirect to='/home' />
-                </Switch>
+                            */}                    
+                            <Route exact path='/directory/:campsiteId' component={CampsiteWithId} />
+                            <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
+                            <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                            <Redirect to='/home' />
+                        </Switch>
+                    </CSSTransition>
+                </TransitionGroup>
                 <Footer />
             </div>
         );

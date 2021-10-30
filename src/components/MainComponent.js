@@ -8,7 +8,7 @@ import {Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import { connect } from 'react-redux';
-import { postComment, fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
+import { postComment, fetchCampsites, fetchComments, fetchPromotions, fetchPartners, postFeedback } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -26,7 +26,7 @@ const mapStateToProps = state => {
         campsites: state.campsites,
         comments: state.comments,
         partners: state.partners,
-        promotions: state.promotions
+        promotions: state.promotions        
     };
 };
 
@@ -36,7 +36,8 @@ const mapDispatchToProps = {
     resetFeedbackForm: () => (actions.reset('feedbackForm')),
     fetchComments: () => (fetchComments()),
     fetchPromotions: () => (fetchPromotions()),
-    fetchPartners: () => (fetchPartners())
+    fetchPartners: () => (fetchPartners()),
+    postFeedback: (feedback) => (postFeedback(feedback))
 };
 
 class Main extends Component { 
@@ -107,7 +108,12 @@ class Main extends Component {
                             */}                    
                             <Route exact path='/directory/:campsiteId' component={CampsiteWithId} />
                             <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-                            <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                            <Route exact path='/contactus' render={() => 
+                                <Contact 
+                                    resetFeedbackForm={this.props.resetFeedbackForm} 
+                                    postFeedback={this.props.postFeedback} 
+                                /> 
+                            } />
                             <Redirect to='/home' />
                         </Switch>
                     </CSSTransition>
